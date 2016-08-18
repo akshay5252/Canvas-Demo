@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ITMD-4/565 Lab 3 - Canvas Drawing</title>
+	<style type="text/css">
+		#content-wrapper {
+			width: 600px;
+			margin: 0 auto;
+			text-align: center;
+		}
+		#canvasRun {
+			background-color: #c00;
+			border: 0;
+			color: #fff;
+		}
+	</style>
+</head>
+<body>
+	<div id="content-wrapper">
+		<button id="canvasRun">Draw Canvas</button><br><br>
+		<canvas id="myCanvas" width="600" height="450"></canvas>
+	</div>
+	<div style="display:none;">
+ 
+</div>
+	<script type="text/javascript">
+
+	/* Initialization of Varialbles */
+	var canvas = document.getElementById("myCanvas");
+	var context = canvas.getContext("2d");
+	var count=0;
+	var animationFrame = window.requestAnimationFrame || 
+                            window.mozRequestAnimationFrame || 
+                            window.webkitRequestAnimationFrame || 
+                            window.msRequestAnimationFrame;
+	
+	var canvasRunButton=document.getElementById("canvasRun").onclick=function()
+		{
+			function getTime() {
+				return (new Date()).getTime();
+			}
+			
+			
+			
+			var img = new Image(); 
+			var counterAngle = 0;
+			var initialAngle = (2*Math.PI);
+	        var finishAngle = (Math.PI*0.70);
+    		
+       		var oldTime = getTime();
+ 			var gradient = context.createLinearGradient(0, 420, 0, 0);
+				
+    		function Update(){
+				
+       			var newTime = getTime(),
+       			diff = newTime - oldTime;
+      			oldTime = newTime;
+				
+
+				/* Canvas code to generate the gradient*/
+        		context.clearRect(0,0,canvas.width,canvas.height);
+       			gradient.addColorStop(0, "black");
+				gradient.addColorStop(1, "white");
+				context.fillStyle = gradient;
+				context.fillRect(0, 0, 600, 450);
+				
+				//Header information
+				context.fillStyle = "#C80000";
+				context.font = "32px sans-serif";
+				context.fillText("ITMD 565 Canvas Lab",140,40);
+	
+				//Line to seperate the header from the elements	
+				context.beginPath();
+				context.moveTo(20,55);
+				context.setLineDash([0, 0]);
+				context.lineTo(580,55);
+				context.lineWidth=5;
+				context.strokeStyle = "#C80000";
+				context.stroke();
+							
+					        			
+				//Circle canvas code
+          		context.beginPath();
+      		  	context.arc(90, 150, 50, 0, 2 * Math.PI,false);
+      		  	context.fillStyle = "#0000C8";
+      		  	context.fill();
+     		  	context.lineWidth = 5;
+     		  	context.strokeStyle = 'white';
+     		  	context.stroke();
+				context.closePath();
+      			  	
+
+				//Triangle Canvas code
+      			context.beginPath();
+      			context.moveTo(30,320);
+				context.lineTo(90,220);
+				context.lineTo(150,320);
+				context.fillStyle = "#00C800";
+				context.fill();
+				  	 
+      			  	
+				//Rectangle Box for the quadratic wave
+      			context.beginPath();
+				context.rect(255,270,280,100);
+				context.fillStyle = "white";
+				context.fill();
+      			  	
+				//First quadratic wave based on calcualtions  	
+				context.lineWidth = 2;
+				context.setLineDash([9, 4]);
+				context.strokeStyle = "#333";
+				context.beginPath();
+				context.moveTo(290, 320);
+				context.quadraticCurveTo(325,220, 385, 320);
+				context.stroke();
+				
+				//Second quadratic wave based on calcualtions  	
+				context.lineWidth = 2;
+				context.setLineDash([9, 4]);
+				context.strokeStyle = "#333";
+				context.beginPath();
+				context.moveTo(385,320);
+      			context.quadraticCurveTo(435,360, 485, 320);
+				context.stroke();
+
+				//User information canvas display code
+				context.fillStyle = 'white';
+				context.font = "14px sans-serif";
+				context.fillText("Akshay Ganji",30,414);
+				context.fillText("ganji323@gmail.com",30,430);
+				    
+				//Canvas code to place the footer	
+				img.src = 'IIT_SAT_stack_186_white.png'; 	
+				context.drawImage(img, 330, 390, 250, 40);
+
+					
+				//Canvas code to animate the arc
+				context.beginPath();  
+				context.setLineDash([0, 0]);					
+        		context.arc(300, 150, 40, initialAngle + counterAngle, finishAngle + counterAngle, true);
+				context.strokeStyle = "orange";
+        		context.lineWidth = 10.0;
+        		context.stroke();
+        		context.closePath(); 
+        		counterAngle += diff * 0.0005; //Adjust the speed here
+        	    counterAngle %= 2 * Math.PI;
+				
+				
+				
+				animationFrame(Update);
+				}
+			animationFrame(Update);
+			
+			
+			
+			animationFrame(function rotateSquare() {
+				context.save();
+				context.clearRect(466, 95, 100, 100);
+				context.fillStyle =gradient;
+				context.fillRect(400, 90, 180, 180);
+				context.translate(490, 140);
+				context.rotate((Math.PI/180)*count);
+				context.fillStyle ="#C80000";
+				context.fillRect(-60, -60, 90, 90);
+				context.lineWidth = 6;
+				context.strokeStyle = 'white';
+				context.strokeRect(-60, -60, 90, 90);
+				count = count + 1;
+				context.restore();
+				animationFrame(function() {
+				rotateSquare();
+					});
+        	    });
+				
+			} /* Close of run button function*/
+		</script>
+	</body>
+</html>
